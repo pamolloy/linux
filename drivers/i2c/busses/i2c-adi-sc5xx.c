@@ -278,7 +278,7 @@ static void adi_twi_handle_interrupt(struct adi_twi_iface *i2c,
 				/* Transmit first data */
 				if (i2c->write_num > 0) {
 					writew(*(i2c->trans_ptr++),
-					       &i2c->reg_base + ADI_I2C_TXDATA8_REG);
+					       i2c->reg_base + ADI_I2C_TXDATA8_REG);
 					i2c->write_num--;
 				}
 			}
@@ -613,10 +613,10 @@ static int adi_twi_do_smbus_xfer(struct i2c_adapter *adap, u16 addr,
 			if (i2c->read_write != I2C_SMBUS_READ) {
 				if (i2c->write_num > 0) {
 					writew(*(i2c->trans_ptr++),
-					       &i2c->reg_base + ADI_I2C_TXDATA8_REG);
+					       i2c->reg_base + ADI_I2C_TXDATA8_REG);
 					if (i2c->write_num <= 255) {
 						writew(i2c->write_num << 6,
-						       &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+						       i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 					} else {
 						writew(0xff << 6, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 						i2c->manual_stop = 1;
@@ -629,7 +629,7 @@ static int adi_twi_do_smbus_xfer(struct i2c_adapter *adap, u16 addr,
 			} else {
 				if (i2c->read_num > 0 && i2c->read_num <= 255) {
 					writew(i2c->read_num << 6,
-					       &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+					       i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 				} else if (i2c->read_num > 255) {
 					writew(0xff << 6, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 					i2c->manual_stop = 1;
