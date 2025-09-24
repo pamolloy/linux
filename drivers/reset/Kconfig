@@ -233,7 +233,7 @@ config RESET_RZG2L_USBPHY_CTRL
 
 config RESET_SC5XX
 	bool "ADI SC5CC Reset Driver"
-	depends on ARCH_SC59X_64
+	depends on ARCH_SC59X_64 || COMPILE_TEST
 	default y
 	help
 	  This enables simple reset controller for ADI ADSP-SC5xx family.
