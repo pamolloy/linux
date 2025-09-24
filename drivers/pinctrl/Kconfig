@@ -474,7 +474,7 @@ config PINCTRL_ROCKCHIP
 
 config PINCTRL_SC5XX
 	bool "ADSP-SC5XX pinctrl driver"
-	default y if ARCH_SC59X_64
+	depends on ARCH_SC59X_64 || COMPILE_TEST
 	depends on OF
 	select PINMUX
 	select GPIOLIB
