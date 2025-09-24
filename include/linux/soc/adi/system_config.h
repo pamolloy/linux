@@ -29,7 +29,7 @@ struct adi_system_config {
 	size_t len;
 
 	/* Internal data populated during usage */
-	struct regmap_config config;
+	const struct regmap_config config;
 	struct regmap *mmio_regmap;
 	struct device_node *np;
 	struct list_head list;
