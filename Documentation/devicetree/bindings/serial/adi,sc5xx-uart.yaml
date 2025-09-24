@@ -41,8 +41,8 @@ properties:
 
   adi,use-edbo:
     type: boolean
-    description: Increase by 16 incoming bit sampling rate for better 
-      granularity and accuracy at high speed rates. 
+    description: Increase by 16 incoming bit sampling rate for better
+      granularity and accuracy at high speed rates.
 
 required:
   - compatible
@@ -72,4 +72,3 @@ examples:
                    <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
       adi,use-edbo;
     };
-
