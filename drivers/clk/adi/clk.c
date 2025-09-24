@@ -18,7 +18,7 @@ struct adi_clk_provider *adi_clk_init(struct device_node *np,
 	struct clk **clk_table;
 	int i;
 
-	ctx = kzalloc(sizeof(struct adi_clk_provider), GFP_KERNEL);
+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
 	if (!ctx)
 		return ERR_PTR(-ENOMEM);
 
