@@ -763,6 +763,8 @@ static int adsp_pinctrl_init_groups(struct adsp_pinctrl *adsp_pinctrl,
 
 	all_pins = devm_kcalloc(dev, sizeof(*all_pins), adsp_pinctrl->total_pins,
 		GFP_KERNEL);
+	if (!all_pins)
+		return -ENOMEM;
 
 	adsp_pinctrl->pins = devm_kcalloc(dev, sizeof(adsp_pinctrl->pins),
 		adsp_pinctrl->total_pins, GFP_KERNEL);
