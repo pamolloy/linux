@@ -473,7 +473,7 @@ config SERIAL_SA1100_CONSOLE
 
 config SERIAL_ADI_UART
 	tristate "ADI uart serial port support"
-	depends on ARCH_SC59X_64
+	depends on ARCH_SC59X_64 || COMPILE_TEST
 	select SERIAL_CORE
 	select SERIAL_CORE_CONSOLE
 	help
