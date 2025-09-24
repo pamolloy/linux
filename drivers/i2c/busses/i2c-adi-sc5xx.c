@@ -110,7 +110,7 @@ static void adi_twi_handle_interrupt(struct adi_twi_iface *i2c,
 				     bool polling)
 {
 	u16 write_value;
-	unsigned short mast_stat = readw(&i2c->reg_base + ADI_I2C_MSTRSTAT_REG);
+	unsigned short mast_stat = readw(i2c->reg_base + ADI_I2C_MSTRSTAT_REG);
 
 	if (twi_int_status & XMTSERV) {
 		if (i2c->write_num <= 0) {
@@ -118,28 +118,28 @@ static void adi_twi_handle_interrupt(struct adi_twi_iface *i2c,
 			 * combine mode.
 			 */
 			if (i2c->cur_mode == TWI_I2C_MODE_COMBINED) {
-				write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG) | MDIR;
-				writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+				write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG) | MDIR;
+				writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 			} else if (i2c->manual_stop) {
-				write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG) | STOP;
-				writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+				write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG) | STOP;
+				writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 			} else if (i2c->cur_mode == TWI_I2C_MODE_REPEAT &&
 				   i2c->cur_msg + 1 < i2c->msg_num) {
 				if (i2c->pmsg[i2c->cur_msg + 1].flags & I2C_M_RD) {
-					write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG)
+					write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG)
 							      | MDIR;
-					writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+					writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 				} else {
-					write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG)
+					write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG)
 							      & ~MDIR;
-					writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+					writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 				}
 			}
 		}
 		/* Transmit next data */
 		while (i2c->write_num > 0 &&
 		       (readw(i2c->reg_base + ADI_I2C_FIFOSTAT_REG) & XMTSTAT) != XMT_FULL) {
-			writew(*(i2c->trans_ptr++), &i2c->reg_base + ADI_I2C_TXDATA8_REG);
+			writew(*(i2c->trans_ptr++), i2c->reg_base + ADI_I2C_TXDATA8_REG);
 			i2c->write_num--;
 		}
 	}
