@@ -627,7 +627,7 @@ config GPIO_SAMA5D2_PIOBU
 
 config GPIO_SC5XX
 	bool "ADI ADSP-SC5XX PORT GPIO driver"
-	default y if ARCH_SC59X_64
+	depends on ARCH_SC59X_64 || COMPILE_TEST
 	depends on OF_GPIO
 	select GPIO_GENERIC
 	help
