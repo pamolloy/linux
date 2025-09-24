@@ -147,7 +147,7 @@ static void adi_twi_handle_interrupt(struct adi_twi_iface *i2c,
 		while (i2c->read_num > 0 &&
 		       (readw(i2c->reg_base + ADI_I2C_FIFOSTAT_REG) & RCVSTAT)) {
 			/* Receive next data */
-			*i2c->trans_ptr = readw(&i2c->reg_base + ADI_I2C_RXDATA8_REG);
+			*i2c->trans_ptr = readw(i2c->reg_base + ADI_I2C_RXDATA8_REG);
 			if (i2c->cur_mode == TWI_I2C_MODE_COMBINED) {
 				/* Change combine mode into sub mode after
 				 * read first data.
@@ -168,27 +168,27 @@ static void adi_twi_handle_interrupt(struct adi_twi_iface *i2c,
 				/* Temporary workaround to avoid possible bus stall -
 				 * Flush FIFO before issuing the STOP condition
 				 */
-				readw(&i2c->reg_base + ADI_I2C_RXDATA16_REG);
-				write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG) | STOP;
-				writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+				readw(i2c->reg_base + ADI_I2C_RXDATA16_REG);
+				write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG) | STOP;
+				writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 			} else if (i2c->cur_mode == TWI_I2C_MODE_REPEAT &&
 					i2c->cur_msg + 1 < i2c->msg_num) {
 				if (i2c->pmsg[i2c->cur_msg + 1].flags & I2C_M_RD) {
-					write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG) |
+					write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG) |
 						     MDIR;
-					writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+					writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 				} else {
-					write_value = readw(&i2c->reg_base + ADI_I2C_MSTRCTRL_REG) &
+					write_value = readw(i2c->reg_base + ADI_I2C_MSTRCTRL_REG) &
 						     ~MDIR;
-					writew(write_value, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+					writew(write_value, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 				}
 			}
 		}
 	}
 	if (twi_int_status & MERR) {
-		writew(0, &i2c->reg_base + ADI_I2C_IMSK_REG);
-		writew(0x3e, &i2c->reg_base + ADI_I2C_MSTRSTAT_REG);
-		writew(0, &i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
+		writew(0, i2c->reg_base + ADI_I2C_IMSK_REG);
+		writew(0x3e, i2c->reg_base + ADI_I2C_MSTRSTAT_REG);
+		writew(0, i2c->reg_base + ADI_I2C_MSTRCTRL_REG);
 		i2c->result = -EIO;
 
 		if (mast_stat & LOSTARB)
