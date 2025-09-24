@@ -83,7 +83,6 @@ static unsigned long sc5xx_cgu_pll_recalc_rate(struct clk_hw *hw,
 		m = pll->msel;
 
 	return parent_rate * m;
-
 }
 
 static int sc5xx_cgu_pll_set_rate(struct clk_hw *hw, unsigned long rate,
@@ -131,7 +130,7 @@ struct clk *sc5xx_cgu_pll(const char *name, const char *parent_name,
 	pll->hw.init = &init;
 	pll->lock = lock;
 	pll->shift = shift;
-	pll->mask = GENMASK(width-1, 0) << shift;
+	pll->mask = GENMASK(width - 1, 0) << shift;
 	pll->msel = pll->mask + 1;
 	pll->m_offset = m_offset;
 
