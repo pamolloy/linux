@@ -25,7 +25,7 @@ properties:
 
   "#size-cells":
     const: 1
-  
+
   "adi,port-sizes":
     $ref: /schemas/types.yaml#/definitions/uint32-array
     maxItems: 9
