@@ -215,8 +215,6 @@ static void sc598_clock_setup_pll(struct device_node *np)
 	sc5xx_clock_setup(np, pll3_branches, ARRAY_SIZE(pll3_branches));
 }
 
-
-
 CLK_OF_DECLARE(adi_sc598_clocks_cgu0, "adi,sc598-cgu0", sc598_clock_setup_cgu0);
 CLK_OF_DECLARE(adi_sc598_clocks_cgu1, "adi,sc598-cgu1", sc598_clock_setup_cgu1);
 CLK_OF_DECLARE(adi_sc598_clocks_cdu, "adi,sc598-cdu", sc598_clock_setup_cdu);
