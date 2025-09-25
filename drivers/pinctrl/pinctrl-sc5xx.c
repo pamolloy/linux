@@ -123,7 +123,7 @@ struct adsp_pinctrl {
 /*
  * Custom pinconf properties
  */
-#define ADSP_PIN_CONFIG_TRU_TOGGLE (PIN_CONFIG_END+1)
+#define ADSP_PIN_CONFIG_TRU_TOGGLE (PIN_CONFIG_END + 1)
 
 static const struct pinconf_generic_params adsp_custom_bindings[] = {
 	/* Configure this pin as a toggle pin which flip each time a trigger event
@@ -234,7 +234,6 @@ static int adsp_pinctrl_dt_subnode_to_map(struct pinctrl_dev *pctldev,
 	sz = (sz == -EINVAL) ? 0 : sz; /* Missing property is OK */
 	if (sz < 0)
 		return dev_err_probe(adsp_pinctrl->dev, sz, "invalid pinmux\n");
-
 
 	for (i = 0; i < sz; i += 2) {
 		u32 pin = array[i];
