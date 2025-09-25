@@ -82,10 +82,10 @@ struct adi_clk_branch {
 	unsigned int			id;
 	enum adi_clk_branch_type	branch_type;
 	const char			*name;
-	const char			*const *parent_names; //should be const?
+	const char			*const *parent_names;
 	u8				num_parents;
 	unsigned long			flags;
-	unsigned long			offset; //void ** iomem offset?!
+	unsigned long			offset;
 	u8				div_flags;
 	u8				shift;
 	u8				div_width;
