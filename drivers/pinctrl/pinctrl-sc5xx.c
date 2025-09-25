@@ -39,12 +39,12 @@
 #define ADSP_PADS_REG_PCFG0				0x04
 #define ADSP_PADS_REG_PCFG1				0x08
 /* Convert from pin number (e.g. 0-143) to drive strength register offset */
-#define ADSP_PADS_PORTx_DS(p)			(0x0c + 0x04*(p/ADSP_PADS_DS_PINS_PER_REG))
+#define ADSP_PADS_PORTx_DS(p)			(0x0c + 0x04 * (p / ADSP_PADS_DS_PINS_PER_REG))
 #define ADSP_PADS_NONPORTS_DS			0x50
 /* Convert from pin number to pull up enable register offset */
-#define ADSP_PADS_PORTx_PUE(p)			(0x98 + 0x04*(p/ADSP_PADS_PUD_PINS_PER_REG))
+#define ADSP_PADS_PORTx_PUE(p)			(0x98 + 0x04 * (p / ADSP_PADS_PUD_PINS_PER_REG))
 /* Convert from pin number to pull down enable register offset */
-#define ADSP_PADS_PORTx_PDE(p)			(0xc4 + 0x04*(p/ADSP_PADS_PUD_PINS_PER_REG))
+#define ADSP_PADS_PORTx_PDE(p)			(0xc4 + 0x04 * (p / ADSP_PADS_PUD_PINS_PER_REG))
 
 /* Non GPIO PORT drive strength settings */
 #define ADSP_NONPORTS_DS_CKOUT			0
@@ -71,7 +71,7 @@
 struct adsp_pin_function {
 	const char *name;
 	/* 0 for gpio, 1-4 for alt functions 0-3 */
-	uint8_t mode;
+	u8 mode;
 };
 
 /*
@@ -110,8 +110,8 @@ struct adsp_pinctrl {
 	unsigned int *pins;
 	spinlock_t lock;
 	size_t num_ports;
-	uint32_t *pin_counts;
-	uint32_t total_pins;
+	u32 *pin_counts;
+	u32 total_pins;
 
 	/* Are the drive strength registers missing on this part? */
 	bool ds_missing;
@@ -396,7 +396,7 @@ static bool __adsp_pinconf_is_pue(struct adsp_pinctrl *p, unsigned int pin)
 		return 0;
 
 	val = readl(p->regs + offset);
-	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
+	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG - 1));
 	return !!(val & bit);
 }
 
@@ -409,7 +409,7 @@ static bool __adsp_pinconf_is_pde(struct adsp_pinctrl *p, unsigned int pin)
 		return 0;
 
 	val = readl(p->regs + offset);
-	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
+	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG - 1));
 	return !!(val & bit);
 }
 
@@ -422,8 +422,8 @@ static u32 __adsp_pinconf_get_ds(struct adsp_pinctrl *p, unsigned int pin)
 		return 0;
 
 	val = readl(p->regs + offset);
-	shift = (pin & (ADSP_PADS_DS_PINS_PER_REG-1)) * ADSP_PADS_DS_BITS;
-	mask = GENMASK(ADSP_PADS_DS_BITS-1, 0) << shift;
+	shift = (pin & (ADSP_PADS_DS_PINS_PER_REG - 1)) * ADSP_PADS_DS_BITS;
+	mask = GENMASK(ADSP_PADS_DS_BITS - 1, 0) << shift;
 	val = val & mask;
 
 	if (val == ADSP_PADS_DS_HIGH)
@@ -508,7 +508,7 @@ static void __adsp_pinconf_pue(struct adsp_pinctrl *p, unsigned int pin, bool st
 	}
 
 	val = readl(p->regs + offset);
-	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
+	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG - 1));
 
 	if (state)
 		writel(val | bit, p->regs + offset);
@@ -529,7 +529,7 @@ static void __adsp_pinconf_pde(struct adsp_pinctrl *p, unsigned int pin, bool st
 	}
 
 	val = readl(p->regs + offset);
-	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG-1));
+	bit = BIT(pin & (ADSP_PADS_PUD_PINS_PER_REG - 1));
 
 	if (state)
 		writel(val | bit, p->regs + offset);
@@ -550,8 +550,8 @@ static void __adsp_pinconf_ds(struct adsp_pinctrl *p, unsigned int pin, bool hig
 	}
 
 	val = readl(p->regs + offset);
-	shift = (pin & (ADSP_PADS_DS_PINS_PER_REG-1)) * ADSP_PADS_DS_BITS;
-	mask = GENMASK(ADSP_PADS_DS_BITS-1, 0) << shift;
+	shift = (pin & (ADSP_PADS_DS_PINS_PER_REG - 1)) * ADSP_PADS_DS_BITS;
+	mask = GENMASK(ADSP_PADS_DS_BITS - 1, 0) << shift;
 	val = val & ~mask;
 
 	if (high)
@@ -780,7 +780,7 @@ static int adsp_pinctrl_init_groups(struct adsp_pinctrl *adsp_pinctrl,
 	for (port = 0; port < adsp_pinctrl->num_ports; ++port) {
 		for (pin = 0; pin < adsp_pinctrl->pin_counts[port]; ++pin) {
 			adsp_pinctrl->group_names[i] = devm_kasprintf(dev, GFP_KERNEL,
-				"p%c%zu", (char) ('A' + port), pin);
+				"p%c%zu", (char)('A' + port), pin);
 			adsp_pinctrl->pins[i] = i;
 
 			all_pins[i].name = adsp_pinctrl->group_names[i];
@@ -799,7 +799,7 @@ static void adsp_set_nongpio_ds(struct adsp_pinctrl *p, int type, bool high)
 {
 	u32 val = readl(p->regs + ADSP_PADS_NONPORTS_DS);
 	u32 shift = ADSP_PADS_DS_BITS * type;
-	u32 mask = GENMASK(ADSP_PADS_DS_BITS-1, 0) << shift;
+	u32 mask = GENMASK(ADSP_PADS_DS_BITS - 1, 0) << shift;
 
 	val = val & ~mask;
 
