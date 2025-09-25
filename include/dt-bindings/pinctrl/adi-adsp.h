@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0*/
+/* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Macros for populating pinmux properties on the pincontroller
  *
@@ -14,6 +14,6 @@
 #define ADI_ADSP_PINFUNC_ALT2     3
 #define ADI_ADSP_PINFUNC_ALT3     4
 
-#define ADI_ADSP_PINMUX(port, pin, func) ((((port - 'A')*16 + pin) << 8) + func)
+#define ADI_ADSP_PINMUX(port, pin, func) ((((port - 'A') * 16 + pin) << 8) + func)
 
 #endif
