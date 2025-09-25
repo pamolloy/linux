@@ -155,7 +155,6 @@ static struct adi_uart_serial_port *adi_uart_serial_ports[ADI_UART_NR_PORTS];
 static void adi_uart_serial_tx_chars(struct adi_uart_serial_port *uart);
 static void adi_uart_serial_reset_irda(struct uart_port *port);
 
-
 static struct adi_uart_serial_port *to_adi_serial_port(struct uart_port *port)
 {
 	return container_of(port, struct adi_uart_serial_port, port);
