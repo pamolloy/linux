@@ -52,7 +52,7 @@ static struct adi_uart_serial_port *adi_uart_serial_ports[ADI_UART_NR_PORTS];
 #define UMOD_MDB                 0x10  /* Enable MDB Mode */
 #define UMOD_IRDA                0x20  /* Enable IrDA Mode */
 #define UMOD_MASK                0x30  /* Uart Mode Mask */
-#define WLS(x)                   (((x-5) & 0x03) << 8)  /* Word Length Select */
+#define WLS(x)                   (((x - 5) & 0x03) << 8)  /* Word Length Select */
 #define WLS_MASK                 0x300  /* Word length Select Mask */
 #define WLS_OFFSET               8      /* Word length Select Offset */
 #define STB                      0x1000  /* Stop Bits */
@@ -151,7 +151,6 @@ static struct adi_uart_serial_port *adi_uart_serial_ports[ADI_UART_NR_PORTS];
 #define DMA_RX_YCOUNT		(PAGE_SIZE / DMA_RX_XCOUNT)
 
 #define DMA_RX_FLUSH_JIFFIES	(msecs_to_jiffies(50))
-
 
 static void adi_uart_serial_tx_chars(struct adi_uart_serial_port *uart);
 static void adi_uart_serial_reset_irda(struct uart_port *port);
@@ -500,7 +499,7 @@ static void adi_uart_serial_set_termios(struct uart_port *port,
 		quot = EDBO | DIV_ROUND_CLOSEST(port->uartclk, baud);
 	} else {
 		baud = uart_get_baud_rate(port, termios, old, 0,
-				port->uartclk/16);
+				port->uartclk / 16);
 		quot = uart_get_divisor(port, baud);
 	}
 
@@ -647,7 +646,6 @@ static int adi_uart_serial_poll_get_char(struct uart_port *port)
 }
 #endif
 
-
 static const struct uart_ops adi_uart_serial_pops = {
 	.tx_empty	= adi_uart_serial_tx_empty,
 	.set_mctrl	= adi_uart_serial_set_mctrl,
@@ -711,7 +709,7 @@ adi_uart_serial_console_get_options(struct adi_uart_serial_port *uart,
 		if (clk & EDBO)
 			*baud = uart->port.uartclk / (clk & 0xffff);
 		else
-			*baud = uart->port.uartclk / (16*clk);
+			*baud = uart->port.uartclk / (16 * clk);
 	}
 	pr_debug("%s:baud = %d, parity = %c, bits= %d\n", __func__,
 			*baud, *parity, *bits);
@@ -728,7 +726,6 @@ adi_uart_serial_console_write(struct console *co, const char *s,
 	uart_console_write(&uart->port, s, count,
 			adi_uart_serial_console_putchar);
 	spin_unlock_irqrestore(&uart->port.lock, flags);
-
 }
 
 static int __init
@@ -775,7 +772,6 @@ static struct console adi_uart_serial_console = {
 	.index		= -1,
 	.data		= &adi_uart_serial_reg,
 };
-
 
 #define ADI_SERIAL_UART_CONSOLE (&adi_uart_serial_console)
 #else
@@ -826,6 +822,7 @@ static int adi_uart_serial_probe(struct platform_device *pdev)
 	struct adi_uart_serial_port *uart = NULL;
 	int ret = 0;
 	int uartid;
+
 	dev_info(dev, "Serial probe\n");
 
 	uartid = of_alias_get_id(np, "serial");
@@ -837,7 +834,7 @@ static int adi_uart_serial_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	if (adi_uart_serial_ports[uartid] == NULL) {
+	if (!adi_uart_serial_ports[uartid]) {
 		uart = kzalloc(sizeof(*uart), GFP_KERNEL);
 		if (!uart)
 			return -ENOMEM;
@@ -895,8 +892,9 @@ static int adi_uart_serial_probe(struct platform_device *pdev)
 				dev_info(dev,
 				"Unable to attach UART Modem Status int.\n");
 			}
-		} else
+		} else {
 			uart->hwflow_mode = ADI_UART_NO_HWFLOW;
+		}
 
 		uart->edbo = false;
 		if (of_property_read_bool(np, "adi,use-edbo"))
@@ -1001,14 +999,12 @@ static inline void adi_uart_write(struct uart_port *port, u32 val,
 	writel(val, port->membase + off);
 }
 
-
 static void adi_uart_wait_bit_set(struct uart_port *port, unsigned int offset,
 				  u32 bit)
 {
 	while (!(adi_uart_read(port, offset) & bit))
 		cpu_relax();
 }
-
 
 static void adi_uart_console_putchar(struct uart_port *port, unsigned char ch)
 {
@@ -1019,7 +1015,6 @@ static void adi_uart_console_putchar(struct uart_port *port, unsigned char ch)
 	adi_uart_write(port, ch, OFFSET_THR);
 }
 
-
 static void adi_uart_early_write(struct console *con, const char *s,
 		unsigned int n)
 {
@@ -1027,7 +1022,6 @@ static void adi_uart_early_write(struct console *con, const char *s,
 
 	uart_console_write(&dev->port, s, n, adi_uart_console_putchar);
 }
-
 
 static int __init adi_uart_early_console_setup(struct earlycon_device *device,
 					  const char *opt)
